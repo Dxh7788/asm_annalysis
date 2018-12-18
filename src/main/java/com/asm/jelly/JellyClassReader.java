@@ -118,7 +118,7 @@ public class JellyClassReader {
     }
 
     public static void main(String[] args) throws Exception {
-        JellyClassReader reader = new JellyClassReader("java.lang.Runnable");
+        JellyClassReader reader = new JellyClassReader("World");
         System.out.println(reader.getClassName());
     }
 
