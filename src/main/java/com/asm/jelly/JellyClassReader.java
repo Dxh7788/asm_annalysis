@@ -184,17 +184,18 @@ public class JellyClassReader {
             //找到字节长度
             int utf8Length = readUnsignedShort(utf8Index);
             int currentOffsetIndex = utf8Index+2;
-            int charsEndIndex = currentOffsetIndex + 20;
+            int charsEndIndex = currentOffsetIndex + utf8Length;
             char[] chars = new char[utf8Length];
             int srcLength = 0;
             while (currentOffsetIndex<charsEndIndex){
                 int currentByte = classFileBuffer[currentOffsetIndex++] ;
+                //128位以内
                 if ((currentByte & 0x80) == 0){
                     chars[srcLength++] = (char)(currentByte & 0x7F);
-                }else  if ((currentByte & 0xE0) == 0xC0){
+                }else  if ((currentByte & 0xE0) == 0xC0){//utf-8三字节
                     chars[srcLength++] =
                             (char) (((currentByte & 0x1F) << 6) + (classFileBuffer[currentOffsetIndex++] & 0x3F));
-                }else {
+                }else {//unicode,中文4字节问题
                     chars[srcLength++] =
                             (char)
                                     (((currentByte & 0xF) << 12)
