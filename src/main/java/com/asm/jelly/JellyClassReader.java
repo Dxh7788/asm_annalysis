@@ -117,11 +117,6 @@ public class JellyClassReader {
         maxStringLength = currentMaxStringLength;
     }
 
-    public static void main(String[] args) throws Exception {
-        JellyClassReader reader = new JellyClassReader("World");
-        System.out.println(reader.getClassName());
-    }
-
     /**
      * 获取类名
      * */
@@ -129,6 +124,88 @@ public class JellyClassReader {
         return readClass(header+2,new char[maxStringLength]);
     }
 
+    /**
+     * 获取父类名
+     * */
+    public String getSuperClassName(){
+        return readClass(header+4, new char[maxStringLength]);
+    }
+
+    /**
+     * 获取接口header+2+2+2+2,最后一个2代表接口的数量
+     * */
+    public String[] getInterfaces(){
+        int interfaceCount = readUnsignedShort(header+2+2+2);
+        int step =0 ;
+        String[] interfaces = new String[interfaceCount];
+        for (int cnt=0 ; cnt<interfaceCount ; cnt++){
+            //步长是2个字节
+            step += 2;
+            interfaces[cnt] = readStringish(header+2+2+2+step ,new char[maxStringLength]).replace("/",".");
+        }
+        return interfaces;
+    }
+
+    public String[] getInterfaces2(){
+        int currentOffset = header+2+2+2;
+        int interfaceCount = readUnsignedShort(currentOffset);
+        String[] interfaces = new String[interfaceCount];
+        for (int cnt=0 ; cnt<interfaceCount ; cnt++){
+            //步长是2个字节
+            currentOffset += 2;
+            interfaces[cnt] = readClass(currentOffset,new char[maxStringLength]);
+        }
+        return interfaces;
+    }
+
+    /**
+     * 获取接口方式3
+     * */
+    public String[] getInterfaces3(){
+        byte[] classFileBuffer = b;
+        //首先获取接口数量
+        int currentOffset = header+2+2+2;
+        int interfacesCount = readUnsignedShort(currentOffset);
+        String[] interfaces = new String[interfacesCount];
+        int step = 0;
+        for (int i=0;i!=interfacesCount;i++){
+            //找出常量池索引
+            step += 2;
+            int constantPoolIndex = readUnsignedShort(currentOffset+step);
+            //找到此常量池处引用的常量池索引
+            int constantUtf8ValuesIndex = readUnsignedShort(cpInfoOffsets[constantPoolIndex]);
+            String value = constantUtf8Values[constantUtf8ValuesIndex];
+            if (value != null){
+                interfaces[i] = value;
+                continue;
+            }
+            //生成字符串,找到常量池索引constantUtf8Values`Index的位置
+            int utf8Index = cpInfoOffsets[constantUtf8ValuesIndex];
+            //找到字节长度
+            int utf8Length = readUnsignedShort(utf8Index);
+            int currentOffsetIndex = utf8Index+2;
+            int charsEndIndex = currentOffsetIndex + 20;
+            char[] chars = new char[utf8Length];
+            int srcLength = 0;
+            while (currentOffsetIndex<charsEndIndex){
+                int currentByte = classFileBuffer[currentOffsetIndex++] ;
+                if ((currentByte & 0x80) == 0){
+                    chars[srcLength++] = (char)(currentByte & 0x7F);
+                }else  if ((currentByte & 0xE0) == 0xC0){
+                    chars[srcLength++] =
+                            (char) (((currentByte & 0x1F) << 6) + (classFileBuffer[currentOffsetIndex++] & 0x3F));
+                }else {
+                    chars[srcLength++] =
+                            (char)
+                                    (((currentByte & 0xF) << 12)
+                                            + ((classFileBuffer[currentOffsetIndex++] & 0x3F) << 6)
+                                            + (classFileBuffer[currentOffsetIndex++] & 0x3F));
+                }
+            }
+            interfaces[i] = new String(chars, 0, srcLength);
+        }
+        return interfaces;
+    }
     public String readClass(final int offset, final char[] charBuffer) {
         return readStringish(offset, charBuffer);
     }
@@ -183,6 +260,17 @@ public class JellyClassReader {
     private short readUnsignedShort(int offset) {
         byte[] classFileBuffer = b;
         return (short)(((classFileBuffer[offset]&0xFF) << 8) | (classFileBuffer[offset + 1]&0xFF));
+    }
+
+
+    public static void main(String[] args) throws Exception {
+        JellyClassReader reader = new JellyClassReader("World");
+        System.out.println("类名为:"+reader.getClassName().replace("/","."));
+        System.out.println("父类是:"+reader.getSuperClassName().replace("/","."));
+        String[] interfaces = reader.getInterfaces3();
+        for (String inf:interfaces){
+            System.out.println(inf);
+        }
     }
 
 }

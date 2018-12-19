@@ -1,4 +1,6 @@
-public class World{
+import java.io.Serializable;
+
+public class World implements Serializable {
     private final int a = 10;
     private final int b = 10;
     private float c = 11f;
