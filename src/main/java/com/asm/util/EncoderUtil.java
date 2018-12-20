@@ -33,7 +33,7 @@ public class EncoderUtil {
     public static void main(String[] args) {
         EncoderUtil util = new EncoderUtil();
         byte[] datas = "果冻".getBytes();
-        String str =util.bytes2Str(datas,4);
+        String str =util.bytes2Str(datas,datas.length/3);
         System.out.println(str);
     }
 }
