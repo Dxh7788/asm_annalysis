@@ -265,7 +265,7 @@ public class JellyClassReader {
 
 
     public static void main(String[] args) throws Exception {
-        JellyClassReader reader = new JellyClassReader("World");
+        JellyClassReader reader = new JellyClassReader("com.asm.World");
         System.out.println("类名为:"+reader.getClassName().replace("/","."));
         System.out.println("父类是:"+reader.getSuperClassName().replace("/","."));
         String[] interfaces = reader.getInterfaces3();

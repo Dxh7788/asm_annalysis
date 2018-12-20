@@ -1,8 +1,11 @@
 package com.asm.jelly;
 
 import org.objectweb.asm.ClassReader;
+import org.objectweb.asm.ClassWriter;
 
 import java.io.IOException;
+
+import static org.objectweb.asm.ClassReader.EXPAND_FRAMES;
 
 /**
  * @author dongxiaohong
@@ -11,14 +14,9 @@ import java.io.IOException;
 public class JellyAsmBoot {
 
     public static void main(String[] args) throws IOException {
-        ClassReader reader = new ClassReader("java.lang.Runnable");
-        System.out.println(reader.getClassName());
-        System.out.println(reader.getAccess());
-        System.out.println(reader.getItemCount());
-        System.out.println(reader.getSuperName());
-        for (String intf:reader.getInterfaces()){
-            System.out.println(intf);
-        }
+        ClassReader reader = new ClassReader("com.asm.World");
+        ClassWriter visitor = new ClassWriter(2);
+        reader.accept(visitor,EXPAND_FRAMES);
         System.out.println(reader.getMaxStringLength());
     }
 }
