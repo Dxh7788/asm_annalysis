@@ -1,8 +1,10 @@
 package com.asm;
 
+import com.asm.annotation.Value;
 import com.asm.jelly.Symbol;
 
-public class World {
+public class World{
+    @Value
     private final int a = 10;
     private final int b = 10;
     private float c = 11f;
