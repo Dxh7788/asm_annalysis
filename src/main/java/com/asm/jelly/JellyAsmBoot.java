@@ -15,7 +15,7 @@ public class JellyAsmBoot {
 
     public static void main(String[] args) throws IOException {
         ClassReader reader = new ClassReader("com.asm.World");
-        ClassWriter visitor = new ClassWriter(2);
+        ClassPrinter visitor = new ClassPrinter();
         reader.accept(visitor,EXPAND_FRAMES);
         System.out.println(reader.getMaxStringLength());
     }

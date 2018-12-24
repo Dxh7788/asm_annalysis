@@ -39,6 +39,7 @@ public class ClassPrinter extends ClassVisitor {
 
     @Override
     public AnnotationVisitor visitAnnotation(String descriptor, boolean visible) {
+        System.out.println(descriptor+":"+visible);
         return super.visitAnnotation(descriptor, visible);
     }
 
@@ -61,7 +62,7 @@ public class ClassPrinter extends ClassVisitor {
 
     @Override
     public FieldVisitor visitField(int access, String name, String descriptor, String signature, Object value) {
-        System.out.println("  "+name+ descriptor);
+        System.out.println("  "+name+":"+ descriptor);
         return null;
     }
 
