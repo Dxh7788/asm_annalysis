@@ -2,9 +2,11 @@ package com.asm;
 
 import com.asm.annotation.Value;
 import com.asm.jelly.Symbol;
+import com.sun.istack.internal.NotNull;
 
-public class World implements Readable{
-    private final int a = 10;
+public class World <T> implements Readable<@Value T>{
+    @NotNull
+    private final Integer a=null;
     private final int b = 10;
     private float c = 11f;
     private float d = 11f;

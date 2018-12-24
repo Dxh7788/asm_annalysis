@@ -95,4 +95,11 @@ public class JellyAsmBootTest {
             in.close();
         }
     }
+
+    @Test
+    public void te(){
+        StringBuilder builder = new StringBuilder("dddd\txx");
+        System.out.println(builder.delete(builder.lastIndexOf("\t"),builder.length()));
+        System.out.println(JellyAsmBootTest.class.getName());
+    }
 }
