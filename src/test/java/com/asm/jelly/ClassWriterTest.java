@@ -1,5 +1,7 @@
 package com.asm.jelly;
 
+import com.asm.loader.MyClassLoader;
+import com.asm.loader.StubClassLoader;
 import org.junit.Test;
 import org.objectweb.asm.ClassWriter;
 
@@ -29,5 +31,11 @@ public class ClassWriterTest {
         }
         out.close();
         in.close();
+        //加载方式1
+        MyClassLoader loader = new MyClassLoader();
+        Class clazz = loader.defineClass("com.asm.Robbin", bytes);
+        //加载方式2
+        StubClassLoader stubClassLoader = new StubClassLoader();
+        stubClassLoader.findClass("");
     }
 }
