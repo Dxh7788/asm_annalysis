@@ -234,4 +234,12 @@ public class MapUtilTest {
         System.out.println(2&3);
         System.out.println(3&2);
     }
+
+    /**resize后链表分成两段,一段是挂在桶的原大小区间中,一段是桶的新大小区间中*/
+    @Test
+    public void resizeTest2(){
+        System.out.println(15&17);
+        System.out.println(16&17);
+        System.out.println(16&33);
+    }
 }
