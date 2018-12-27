@@ -141,4 +141,97 @@ public class MapUtilTest {
             System.out.println(entry.getKey()+":"+entry.getValue());
         }
     }
+    @Test
+    public void defaultHashMapTest(){
+        Map<Long,String> map = new HashMap<>();
+        map.put(23L,"test1");
+        map.put(46L,"test2");
+        map.put(2L,"test3");
+        for (Map.Entry<Long,String> entry:map.entrySet()){
+            System.out.println(entry.getKey()+":"+entry.getValue());
+        }
+    }
+
+    @Test
+    public void conflictMapTest(){
+        Map<Long,String> map = new HashMap<>();
+        map.put(1L,"test1");
+        map.put(17L,"test2");
+        map.put(33L,"test3");
+        map.put(49L,"test3");
+        map.put(65L,"test3");
+        map.put(81L,"test3");
+        map.put(97L,"test3");
+        map.put(113L,"test3");
+        map.put(129L,"test3");
+        map.put(145L,"test3");
+        map.put(161L,"test3");
+        map.put(177L,"test3");
+        for (Map.Entry<Long,String> entry:map.entrySet()){
+            System.out.println(entry.getKey()+":"+entry.getValue());
+        }
+    }
+    /**
+     * a%b相当于a&(b-1)如果是3%2=1,相当于3&1
+     * 也就是说 15%4 = 3相当于15%3
+     * 测试一下14&4的效果
+     * 以下相当于 n%16
+     * */
+    @Test
+    public void modelTest(){
+        System.out.println(15&0);
+        System.out.println(15&1);
+        System.out.println(15&2);
+        System.out.println(15&3);
+        System.out.println(15&4);
+        System.out.println(15&5);
+        System.out.println(15&6);
+        System.out.println(15&7);
+        System.out.println(15&8);
+        System.out.println(15&9);
+        System.out.println(15&10);
+        System.out.println(15&11);
+        System.out.println(15&12);
+        System.out.println(15&13);
+        System.out.println(15&14);
+        System.out.println(15&15);
+        System.out.println(15&16);
+        System.out.println(15&17);
+        System.out.println(15&18);
+    }
+    @Test
+    public void resizeTest(){
+        System.out.println(15&16);
+        System.out.println(31&16);
+        System.out.println(15&17);
+        System.out.println(31&17);
+        System.out.println(15&18);
+        System.out.println(31&18);
+    }
+    @Test
+    public void ifElseIfTest(){
+        //if else为互斥执行,其中一个执行另一个便不执行
+        if (true){
+            System.out.println("branch 1 test....");
+        }else if (true){
+            System.out.println("branch 2 test....");
+        }else {
+            System.out.println("branch 3 test....");
+        }
+
+        /**
+         * 遍历旧的数据,放置在新的table中.
+         * (1)找到不是空的桶,
+         * (2)桶内数据可能不止一个,这时还要遍历链表.
+         * (3)遍历是把链表分成两部分,一部分是继续保存在旧桶中,一部分挂在新桶部分.
+         * (4)最后在新的桶上将上面两部分挂在上边。
+         * */
+
+    }
+    @Test
+    public void mathTest(){
+        /**表明2&3=3&2运算的自反性质*/
+        System.out.println(2&3);
+        System.out.println(3&2);
+    }
 }
