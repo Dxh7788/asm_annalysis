@@ -1,5 +1,6 @@
 package com.asm.jelly;
 
+import com.sun.istack.internal.NotNull;
 import org.junit.Test;
 
 import java.math.BigDecimal;
@@ -81,5 +82,13 @@ public class DecimalFormatUtilTest {
                 break;
         }
         return new BigDecimal(number/Math.pow(10000, pow)).setScale(scale, RoundingMode.HALF_UP)+unit;
+    }
+    @Test
+    public void notNullTest(){
+        ko(null);
+    }
+
+    private void ko(@NotNull String kl) {
+        System.out.println(kl);
     }
 }
