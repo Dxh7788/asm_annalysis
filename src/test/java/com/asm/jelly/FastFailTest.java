@@ -1,5 +1,6 @@
 package com.asm.jelly;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -11,6 +12,15 @@ import java.util.List;
  * @date 2018/12/29 14:12
  */
 public class FastFailTest {
+    private List<String> list = new ArrayList<>();
+
+    @Before
+    public void setUp(){
+        list.add("123");
+        list.add("124");
+        list.add("126");
+        list.add("127");
+    }
     @Test
     public void listFastFail(){
         List<String> values = new ArrayList<>();
@@ -42,5 +52,89 @@ public class FastFailTest {
             iterator.remove();
 //            System.out.println(iterator.next());
         }
+    }
+    /**
+     * 启动两个线程
+     * 一个遍历集合数据，另一个改变集合结构
+     * */
+    @Test
+    public void listFastFailThreadTest() throws InterruptedException {
+
+        Thread thread1 = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                for (String l:list){
+                    System.out.println(l);
+                }
+            }
+        });
+
+        Thread thread2 = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                list.remove(1);
+            }
+        });
+        thread1.start();
+        thread2.start();
+    }
+    /**
+     * fast-fail机制的不安全
+     * */
+    @Test
+    public void listFastFailThreadIteratorTest() throws InterruptedException {
+
+        Thread thread1 = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                for (String l:list){
+                    System.out.println(l);
+                }
+            }
+        });
+
+        Thread thread2 = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Iterator<String> iterator = list.iterator();
+                while (iterator.hasNext()){
+                    if (iterator.next()=="123"){
+                        iterator.remove();
+                    }
+                }
+            }
+        });
+        thread1.start();
+        thread2.start();
+    }
+    /**
+     * 以下是否能实现fast-safe机制,经验证是可以实现fast-safe机制
+     * 但是涉及很多clone和copy操作,而且有可能和原来的数据结构不相同
+     * */
+    @Test
+    public void listIfFastSafeThreadTest(){
+        Thread thread1 = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                for (String l:list){
+                    System.out.println(l);
+                }
+            }
+        });
+
+        Thread thread2 = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                List<String> copyList = new ArrayList<>(list);
+                Iterator<String> iterator = copyList.iterator();
+                while (iterator.hasNext()){
+                    if (iterator.next()=="123"){
+                        iterator.remove();
+                    }
+                }
+            }
+        });
+        thread1.start();
+        thread2.start();
     }
 }
